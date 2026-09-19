@@ -24,6 +24,23 @@ const config = loadConfig({
 });
 
 describe("foundation app", () => {
+  test("root endpoint describes the API without requiring a database", async () => {
+    const app = createApp({ config, logger });
+    const response = await app.request("/");
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      data: {
+        service: "pos-backend",
+        status: "ok",
+        apiBase: "/api/v1",
+        docs: "/api/docs",
+        health: "/api/v1/health",
+        ready: "/api/v1/ready"
+      }
+    });
+  });
+
   test("health endpoint is available without a database", async () => {
     const app = createApp({ config, logger });
     const response = await app.request("/api/v1/health");

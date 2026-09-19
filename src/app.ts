@@ -128,6 +128,18 @@ export function createApp(deps: AppDependencies) {
   app.use("*", csrfMiddleware(deps));
   app.onError(errorHandler);
 
+  app.get("/", (c) =>
+    c.json({
+      data: {
+        service: "pos-backend",
+        status: "ok",
+        apiBase: "/api/v1",
+        docs: "/api/docs",
+        health: "/api/v1/health",
+        ready: "/api/v1/ready"
+      }
+    })
+  );
   app.get("/api/openapi.json", (c) => c.json(openApiDocument()));
   app.get("/api/docs", swaggerUI({ url: "/api/openapi.json" }));
 
