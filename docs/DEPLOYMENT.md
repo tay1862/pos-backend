@@ -50,6 +50,34 @@ terminate TLS. Add Caddy or another TLS proxy before exposing the API to the pub
 internet. The PostgreSQL data volume must be backed up before upgrades; never remove
 the volume as part of a normal deploy.
 
+### Caddy reverse proxy
+
+For the pilot domain, point its `A` record at the VPS before starting Caddy. Caddy
+will obtain and renew the HTTPS certificate automatically when ports 80 and 443 are
+reachable:
+
+```caddyfile
+kanghan.site {
+    reverse_proxy 127.0.0.1:3000
+}
+```
+
+After installing Caddy, save the block as `/etc/caddy/Caddyfile`, validate it, and
+restart the service:
+
+```bash
+caddy validate --config /etc/caddy/Caddyfile
+systemctl enable caddy
+systemctl restart caddy
+curl -fsS https://kanghan.site/api/v1/health
+curl -fsS https://kanghan.site/api/v1/ready
+```
+
+Set `APP_ORIGIN=https://kanghan.site` and
+`INVITATION_BASE_URL=https://kanghan.site/invitations` in the production env file
+before recreating the backend container. Keep the backend bound to loopback so it
+cannot bypass the TLS proxy.
+
 ## Operations
 
 Track at minimum:
