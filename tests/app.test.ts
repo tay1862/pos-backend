@@ -54,6 +54,21 @@ describe("foundation app", () => {
     });
   });
 
+  test("CORS preflight allows the configured application origin", async () => {
+    const app = createApp({ config, logger });
+    const response = await app.request("/api/v1/health", {
+      method: "OPTIONS",
+      headers: {
+        Origin: config.APP_ORIGIN,
+        "Access-Control-Request-Method": "GET"
+      }
+    });
+
+    expect(response.status).toBe(204);
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBe(config.APP_ORIGIN);
+    expect(response.headers.get("Access-Control-Allow-Credentials")).toBe("true");
+  });
+
   test("readiness fails closed when database is not configured", async () => {
     const app = createApp({ config, logger });
     const response = await app.request("/api/v1/ready");

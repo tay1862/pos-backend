@@ -78,6 +78,10 @@ Set `APP_ORIGIN=https://kanghan.site` and
 before recreating the backend container. Keep the backend bound to loopback so it
 cannot bypass the TLS proxy.
 
+If the frontend is hosted on another origin, add its exact HTTPS origin to the
+comma-separated `CORS_ORIGINS` setting and recreate the backend. The API never uses
+a wildcard origin with credentialed sessions.
+
 ## Operations
 
 Track at minimum:

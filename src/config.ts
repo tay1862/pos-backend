@@ -12,6 +12,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string().url(),
   DATABASE_SSL: booleanString,
   APP_ORIGIN: z.string().url(),
+  CORS_ORIGINS: z.string().default(""),
   SESSION_COOKIE_NAME: z.string().min(1).default("pos_session"),
   PLATFORM_ADMIN_EMAIL: z.string().email(),
   INVITATION_BASE_URL: z.string().url(),
@@ -33,4 +34,8 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
   }
 
   return parsed.data;
+}
+
+export function allowedOrigins(config: Pick<AppConfig, "APP_ORIGIN" | "CORS_ORIGINS">): string[] {
+  return [...new Set([config.APP_ORIGIN, ...config.CORS_ORIGINS.split(",")].map((origin) => origin.trim().replace(/\/$/, "")).filter(Boolean))];
 }

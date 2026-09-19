@@ -1,4 +1,5 @@
 import { swaggerUI } from "@hono/swagger-ui";
+import { cors } from "hono/cors";
 import { Hono, type Context } from "hono";
 import { sql } from "drizzle-orm";
 import type { AppBindings, AppDependencies } from "./http/context";
@@ -11,6 +12,7 @@ import { authMiddleware } from "./http/middleware/auth";
 import { openApiDocument } from "./http/openapi";
 import { AppError } from "./infra/errors";
 import { setRlsContext } from "./db/rls";
+import { allowedOrigins } from "./config";
 import {
   createCategory,
   createPriceList,
@@ -125,6 +127,16 @@ export function createApp(deps: AppDependencies) {
 
   app.use("*", requestIdMiddleware);
   app.use("*", loggerMiddleware(deps));
+  app.use(
+    "*",
+    cors({
+      origin: allowedOrigins(deps.config),
+      credentials: true,
+      allowHeaders: ["Authorization", "Content-Type", "Idempotency-Key", "X-Organization-Id", "X-Request-Id"],
+      exposeHeaders: ["X-Request-Id"],
+      maxAge: 600
+    })
+  );
   app.use("*", csrfMiddleware(deps));
   app.onError(errorHandler);
 
