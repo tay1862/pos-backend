@@ -8,5 +8,4 @@ coverage
 dist
 .DS_Store
 *.log
-tests
 docs
