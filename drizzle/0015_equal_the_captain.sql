@@ -1,0 +1,1 @@
+ALTER TABLE "order_items" ADD COLUMN "tax_included_in_price_snapshot" boolean DEFAULT false NOT NULL;

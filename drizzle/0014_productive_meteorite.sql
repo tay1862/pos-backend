@@ -1,0 +1,1 @@
+ALTER TYPE "public"."sync_command_status" ADD VALUE 'PROCESSING' BEFORE 'APPLIED';

@@ -1,0 +1,42 @@
+export const platformPermissions = [
+  "organization.view",
+  "organization.update",
+  "locations.manage",
+  "employees.manage",
+  "roles.manage",
+  "audit.view",
+  "catalog.view",
+  "catalog.manage",
+  "pricing.manage",
+  "taxes.manage",
+  "inventory.view",
+  "inventory.manage",
+  "purchasing.manage",
+  "recipes.manage",
+  "wholesale.view",
+  "wholesale.manage",
+  "receivables.manage",
+  "devices.view",
+  "devices.manage",
+  "sync.read",
+  "sync.write",
+  "sync.process",
+  "sync.snapshot",
+  "tickets.create",
+  "tickets.view",
+  "tickets.update",
+  "tickets.merge",
+  "tickets.transfer_items",
+  "tickets.close",
+  "tickets.cancel",
+  "discounts.apply",
+  "refunds.create",
+  "bills.void",
+  "kitchen.dispatch",
+  "kitchen.update",
+  "print.reprint"
+] as const;
+
+export type PermissionCode = (typeof platformPermissions)[number];
+
+export const ownerRolePermissions: PermissionCode[] = [...platformPermissions];
